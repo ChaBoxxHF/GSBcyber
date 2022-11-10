@@ -14,10 +14,14 @@ function hashMdpVisiteur($pdo)
     $res = $pdo->query($req);
     $lesLignes = $res->fetchAll();
     foreach ($lesLignes as $unVisiteur) {
-        $mdp = password_hash($unVisiteur['mdp'], PASSWORD_DEFAULT);
-        $id = $unVisiteur['id'];
-        $req = "update visiteur set mdp ='$mdp' where visiteur.id ='$id' ";
-        $pdo->exec($req);
+        if (strlen($unVisiteur['mdp'])<60){
+            $mdp = password_hash($unVisiteur['mdp'], PASSWORD_DEFAULT);
+            $id = $unVisiteur['id'];
+            $req = "update visiteur set mdp ='$mdp' where visiteur.id ='$id' ";
+            echo("le mdp de [".$unVisiteur['prenom']." ".$unVisiteur['nom']."] a été modifié en base\n");
+            $pdo->exec($req);
+        }
+        else{ echo ("le mdp de [".$unVisiteur['prenom']." ".$unVisiteur['nom']."] n'a été modifié car il est déjà hashé\n");}
     }
 }
 
