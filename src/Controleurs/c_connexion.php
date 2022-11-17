@@ -47,6 +47,10 @@ switch ($action) {
             header('Location: index.php');
         }
         break;
+    case 'valideA2FConnexion':
+        $code = filter_input(INPUT_POST,'code',FILTER_SANITIZE_NUMBER_INT);
+        //faire la suite
+        break;
     default:
         include PATH_VIEWS . 'v_connexion.php';
         break;
