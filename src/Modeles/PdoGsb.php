@@ -94,7 +94,7 @@ class PdoGsb
     {
         $requetePrepare = $this->connexion->prepare(
             'SELECT visiteur.id AS id, visiteur.nom AS nom, '
-            . 'visiteur.prenom AS prenom '
+            . 'visiteur.prenom AS prenom, visiteur.email as email '
             . 'FROM visiteur '
             . 'WHERE visiteur.login = :unLogin'
         );
@@ -112,6 +112,17 @@ class PdoGsb
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
         $requetePrepare->execute();
         return $requetePrepare->fetch(PDO::FETCH_OBJ)->mdp;
+    }
+    
+    public function setCodeA2F($id,$code){
+        $requetePrepare = $this->connexion->prepare(
+                'update visiteur '
+                . 'set codea2f = :unCode '
+                . 'where visiteur.id = :unIdVisiteur '
+        );
+        $requetePrepare->bindParam(':unCode',$code,PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unIdVisiteur', $id,PDO::PARAM_STR);
+        $requetePrepare->execute();
     }
 
     /**

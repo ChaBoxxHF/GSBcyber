@@ -26,7 +26,7 @@ abstract class Utilitaires
      */
     public static function estConnecte(): bool
     {
-        return isset($_SESSION['idVisiteur']);
+        return isset($_SESSION['idVisiteur']) && isset($_SESSION['codeA2F']);
     }
 
     /**
