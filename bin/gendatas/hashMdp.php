@@ -8,6 +8,12 @@
 $pdo = new PDO('mysql:host=localhost;dbname=gsb_frais2', 'userGsb', 'secret');
 $pdo->query('SET CHARACTER SET utf8');
 
+function augmentationNbCaractereMdp($pdo){
+    $pdo->exec("ALTER TABLE utilisateur MODIFY mdp VARCHAR(255)");
+    echo("le nombre de caractère de la colonne mdp est passé à 255\n");
+}
+
+
 function hashMdpVisiteur($pdo)
 {
     $req = 'select * from visiteur';
@@ -25,4 +31,5 @@ function hashMdpVisiteur($pdo)
     }
 }
 
+augmentationNbCaractereMdp($pdo);
 hashMdpVisiteur($pdo);
