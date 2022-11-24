@@ -90,7 +90,7 @@ class PdoGsb
      *
      * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
      */
-    public function getInfosVisiteur($login, $mdp): array|bool
+    public function getInfosVisiteur($login): array|bool
     {
         $requetePrepare = $this->connexion->prepare(
             'SELECT visiteur.id AS id, visiteur.nom AS nom, '
@@ -123,6 +123,17 @@ class PdoGsb
         $requetePrepare->bindParam(':unCode',$code,PDO::PARAM_STR);
         $requetePrepare->bindParam(':unIdVisiteur', $id,PDO::PARAM_STR);
         $requetePrepare->execute();
+    }
+    
+    public function getCodeVisiteur($id){
+        $requetePrepare = $this->connexion->prepare(
+                'select visiteur.codea2f as codea2f '
+                . 'from visiteur '
+                . 'where visiteur.id = :unId'
+        );
+        $requetePrepare->bindParam(':unId',$id,PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch()['codea2f'];
     }
 
     /**

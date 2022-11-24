@@ -54,6 +54,10 @@ abstract class Utilitaires
     {
         session_destroy();
     }
+    
+    public static function connecterA2F($code){
+        $_SESSION['codeA2F']=$code;
+    }
 
     /**
      * Transforme une date au format français jj/mm/aaaa vers le format anglais

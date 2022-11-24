@@ -30,11 +30,6 @@ switch ($action) {
         $login = filter_input(INPUT_POST, 'login', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $mdp = filter_input(INPUT_POST, 'mdp', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $visiteur = $pdo->getInfosVisiteur($login, $mdp);
-        $email = $visiteur['email'];
-        $code = rand(1000,9999);
-        $pdo->setCodeA2F($id,$code);
-        mail($email,'[GSB-AppliFrais] Code de vérification', "Code : $code");
-        include PATH_VIEWS . 'v_code2facteurs.php';
         if (!password_verify($mdp,$pdo->getMdpVisiteur($login))) {
             Utilitaires::ajouterErreur('Login ou mot de passe incorrect');
             include PATH_VIEWS . 'v_erreurs.php';
@@ -44,12 +39,22 @@ switch ($action) {
             $nom = $visiteur['nom'];
             $prenom = $visiteur['prenom'];
             Utilitaires::connecter($id, $nom, $prenom);
-            header('Location: index.php');
+            $email = $visiteur['email'];
+            $code = rand(1000,9999);
+            $pdo->setCodeA2F($id,$code);
+            mail($email,'[GSB-AppliFrais] Code de vérification', "Code : $code");
+            include PATH_VIEWS . 'v_code2facteurs.php';
         }
         break;
     case 'valideA2FConnexion':
         $code = filter_input(INPUT_POST,'code',FILTER_SANITIZE_NUMBER_INT);
-        //faire la suite
+        if ($pdo->getCodeVisiteur($_SESSION['idVisiteur'])!==$code){
+            include PATH_VIEWS . 'v_erreurs.php';
+            include PATH_VIEWS . 'v_code2facteurs.php';
+        } else{
+            Utilitaires::connecterA2F($code);
+            header('Location: index.php');
+        }
         break;
     default:
         include PATH_VIEWS . 'v_connexion.php';
